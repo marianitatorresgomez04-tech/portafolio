@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #9DB7EC;
+  font-family: "Poppins", sans-serif;
+}
+
+.reveal-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 5em;
+  color: black;
+  position: relative;
+  z-index: 1;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+/* Menú principal */
+.menu {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 15px;
+  z-index: 3;
+}
+
+.menu button {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid white;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.menu button:hover {
+  background: rgba(255,255,255,0.5);
+}
+
+/* Selector de idioma */
+.lang-selector {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 3;
+}
+
+.lang-selector button {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid white;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.lang-selector button:hover {
+  background: rgba(255,255,255,0.5);
+}
