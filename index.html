@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mouse Trail Reveal</title>
+<title>Mouse Trail con Texto</title>
 <style>
   html, body {
     margin: 0;
@@ -13,6 +13,7 @@
     font-family: Arial, sans-serif;
   }
 
+  /* Fondo animado */
   #background {
     position: absolute;
     width: 100%;
@@ -20,6 +21,9 @@
     background: linear-gradient(120deg, #ff6a00, #ee0979, #00d2ff);
     background-size: 600% 600%;
     animation: gradient 20s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   @keyframes gradient {
@@ -28,32 +32,30 @@
     100% {background-position: 0% 50%;}
   }
 
+  /* Texto debajo de la capa negra */
+  #hiddenText {
+    color: white;
+    font-size: 3rem;
+    text-align: center;
+    max-width: 80%;
+    pointer-events: none;
+    opacity: 1;
+  }
+
   canvas {
     position: absolute;
     top: 0;
     left: 0;
     display: block;
   }
-
-  h1, p {
-    position: absolute;
-    z-index: 10;
-    width: 100%;
-    text-align: center;
-    color: white;
-    pointer-events: none;
-  }
-
-  h1 { top: 20%; font-size: 3rem; margin:0;}
-  p { top: 30%; font-size: 1.2rem; margin:0;}
 </style>
 </head>
 <body>
 
-<h1>Mi Animación Interactiva</h1>
-<p>Pasa el mouse para revelar el fondo</p>
+<div id="background">
+  <div id="hiddenText">Hay mucha belleza en las cosas cotidianas</div>
+</div>
 
-<div id="background"></div>
 <canvas id="trailCanvas"></canvas>
 
 <script>
@@ -63,11 +65,11 @@ const ctx = canvas.getContext('2d');
 let width = canvas.width = window.innerWidth;
 let height = canvas.height = window.innerHeight;
 
-// Capa superior oscura
+// Capa superior oscura inicial
 ctx.fillStyle = '#111';
 ctx.fillRect(0, 0, width, height);
 
-// Guardamos los trails
+// Trails
 const trails = [];
 
 window.addEventListener('resize', () => {
@@ -77,15 +79,15 @@ window.addEventListener('resize', () => {
   ctx.fillRect(0, 0, width, height);
 });
 
-// Seguimiento del mouse
+// Mouse
 window.addEventListener('mousemove', e => {
-  trails.push({x: e.clientX, y: e.clientY, radius: 50, alpha: 1});
+  trails.push({x: e.clientX, y: e.clientY, radius: 60, alpha: 1});
 });
 
-// Animación de borrado con suavizado
+// Animación
 function animate() {
-  // Poner un fondo semi-transparente para el efecto de desvanecimiento
-  ctx.fillStyle = 'rgba(17,17,17,0.05)'; 
+  // Fondo semi-transparente para efecto rastro
+  ctx.fillStyle = 'rgba(17,17,17,0.05)';
   ctx.fillRect(0, 0, width, height);
 
   ctx.globalCompositeOperation = 'destination-out';
@@ -96,12 +98,11 @@ function animate() {
     ctx.arc(t.x, t.y, t.radius, 0, Math.PI*2);
     ctx.fillStyle = `rgba(0,0,0,${t.alpha})`;
     ctx.fill();
-    t.alpha -= 0.02; // Desvanecimiento gradual
-    if (t.alpha <= 0) trails.splice(i,1); // Eliminar trail terminado
+    t.alpha -= 0.02; // desvanecimiento
+    if (t.alpha <= 0) trails.splice(i,1);
   }
 
   ctx.globalCompositeOperation = 'source-over';
-
   requestAnimationFrame(animate);
 }
 
