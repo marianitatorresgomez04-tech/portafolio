@@ -5,48 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mouse Trail Reveal</title>
 <style>
-  body, html {
+  html, body {
     margin: 0;
     padding: 0;
     overflow: hidden;
     height: 100%;
+    font-family: Arial, sans-serif;
   }
 
   #background {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #ff8a00, #e52e71);
+    background: linear-gradient(120deg, #ff6a00, #ee0979, #00d2ff);
+    background-size: 600% 600%;
+    animation: gradient 20s ease infinite;
   }
 
-  #maskCanvas {
+  @keyframes gradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+  }
+
+  canvas {
     position: absolute;
     top: 0;
     left: 0;
+    display: block;
   }
 
   h1, p {
     position: absolute;
     z-index: 10;
-    color: white;
-    text-align: center;
     width: 100%;
+    text-align: center;
+    color: white;
     pointer-events: none;
   }
 
-  h1 {
-    top: 20%;
-    font-size: 3rem;
-    margin: 0;
-  }
-
-  p {
-    top: 30%;
-    font-size: 1.2rem;
-    margin: 0;
-  }
+  h1 { top: 20%; font-size: 3rem; margin:0;}
+  p { top: 30%; font-size: 1.2rem; margin:0;}
 </style>
 </head>
 <body>
@@ -55,39 +54,58 @@
 <p>Pasa el mouse para revelar el fondo</p>
 
 <div id="background"></div>
-<canvas id="maskCanvas"></canvas>
+<canvas id="trailCanvas"></canvas>
 
 <script>
-const canvas = document.getElementById('maskCanvas');
+const canvas = document.getElementById('trailCanvas');
 const ctx = canvas.getContext('2d');
 
 let width = canvas.width = window.innerWidth;
 let height = canvas.height = window.innerHeight;
 
-// Capa superior que cubre todo
+// Capa superior oscura
 ctx.fillStyle = '#111';
 ctx.fillRect(0, 0, width, height);
 
-// Ajuste de tamaño
+// Guardamos los trails
+const trails = [];
+
 window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-    ctx.fillStyle = '#111';
-    ctx.fillRect(0, 0, width, height);
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+  ctx.fillStyle = '#111';
+  ctx.fillRect(0, 0, width, height);
 });
 
-// Borrar círculo donde pasa el mouse
-canvas.addEventListener('mousemove', e => {
-    const x = e.clientX;
-    const y = e.clientY;
-    const radius = 50;
+// Seguimiento del mouse
+window.addEventListener('mousemove', e => {
+  trails.push({x: e.clientX, y: e.clientY, radius: 50, alpha: 1});
+});
 
-    ctx.globalCompositeOperation = 'destination-out';
+// Animación de borrado con suavizado
+function animate() {
+  // Poner un fondo semi-transparente para el efecto de desvanecimiento
+  ctx.fillStyle = 'rgba(17,17,17,0.05)'; 
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.globalCompositeOperation = 'destination-out';
+
+  for (let i = 0; i < trails.length; i++) {
+    const t = trails[i];
     ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.arc(t.x, t.y, t.radius, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(0,0,0,${t.alpha})`;
     ctx.fill();
-    ctx.globalCompositeOperation = 'source-over';
-});
+    t.alpha -= 0.02; // Desvanecimiento gradual
+    if (t.alpha <= 0) trails.splice(i,1); // Eliminar trail terminado
+  }
+
+  ctx.globalCompositeOperation = 'source-over';
+
+  requestAnimationFrame(animate);
+}
+
+animate();
 </script>
 
 </body>
