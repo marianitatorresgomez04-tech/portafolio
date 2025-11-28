@@ -3,115 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mouse Trail Reveal</title>
+<title>Tras la Puerta</title>
 <style>
   html, body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    height: 100%;
+    overflow-x: hidden; /* horizontal bloqueado */
+    overflow-y: auto;   /* vertical habilitado */
     font-family: Arial, sans-serif;
   }
 
-  /* Fondo animado */
+  /* ------------------------------
+     PRIMER BLOQUE - Mouse Trail
+     ------------------------------ */
   #background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(120deg, #ff6a00, #ee0979, #00d2ff);
-    background-size: 600% 600%;
-    animation: gradient 20s ease infinite;
-  }
-
-  @keyframes gradient {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
-  }
-
-  /* Texto debajo de la capa negra */
-  #hiddenText {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 3rem;
-    text-align: center;
-    pointer-events: none;
-  }
-
-  canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-  }
-</style>
-</head>
-<body>
-
-<div id="background">
-  <div id="hiddenText">Hay mucha belleza en las cosas cotidianas</div>
-</div>
-
-<canvas id="trailCanvas"></canvas>
-
-<script>
-const canvas = document.getElementById('trailCanvas');
-const ctx = canvas.getContext('2d');
-
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
-
-// Capa superior oscura inicial
-ctx.fillStyle = '#111';
-ctx.fillRect(0, 0, width, height);
-
-// Trails
-const trails = [];
-
-window.addEventListener('resize', () => {
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-  ctx.fillStyle = '#111';
-  ctx.fillRect(0, 0, width, height);
-});
-
-// Mouse
-window.addEventListener('mousemove', e => {
-  trails.push({x: e.clientX, y: e.clientY, radius: 50, alpha: 1});
-});
-
-// Animación
-function animate() {
-  // Fondo semi-transparente para efecto rastro
-  ctx.fillStyle = 'rgba(17,17,17,0.05)';
-  ctx.fillRect(0, 0, width, height);
-
-  ctx.globalCompositeOperation = 'destination-out';
-
-  for (let i = 0; i < trails.length; i++) {
-    const t = trails[i];
-    ctx.beginPath();
-    ctx.arc(t.x, t.y, t.radius, 0, Math.PI*2);
-    ctx.fillStyle = `rgba(0,0,0,${t.alpha})`;
-    ctx.fill();
-    t.alpha -= 0.02; // desvanecimiento
-    if (t.alpha <= 0) trails.splice(i,1);
-  }
-
-  ctx.globalCompositeOperation = 'source-over';
-  requestAnimationFrame(animate);
-}
-
-animate();
-</script>
-
- #background {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100vh; /* ocupa pantalla completa */
     background: linear-gradient(120deg, #ff6a00, #ee0979, #00d2ff);
     background-size: 600% 600%;
     animation: gradient 20s ease infinite;
@@ -178,7 +86,6 @@ animate();
     transform: translateX(100%); /* simula abrir puerta */
     opacity: 0;
   }
-
 </style>
 </head>
 <body>
