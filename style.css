@@ -78,7 +78,7 @@ html, body {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url('maca 2.jpeg'); /* aquí pones la puerta abierta */
+  background-image: url('maca 2'); /* aquí pones la puerta abierta */
   background-size: cover;
   background-position: center;
   transition: all 0.6s;
