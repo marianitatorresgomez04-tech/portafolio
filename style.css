@@ -1,1 +1,114 @@
+/* ===============================
+   GENERAL
+   =============================== */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto; /* habilita scroll vertical */
+  font-family: Arial, sans-serif;
+}
 
+/* ===============================
+   PRIMER BLOQUE - MOUSE TRAIL
+   =============================== */
+#background {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* ocupa solo la primera pantalla */
+  background: linear-gradient(120deg, #ff6a00, #ee0979, #00d2ff);
+  background-size: 600% 600%;
+  animation: gradient 20s ease infinite;
+  overflow: hidden; /* que no se salga el canvas */
+}
+
+@keyframes gradient {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+#hiddenText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 3rem;
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#trailCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 2;
+  pointer-events: none; /* no bloquea scroll ni hover */
+}
+
+/* ===============================
+   SEGUNDA SECCIÓN - PUERTAS
+   =============================== */
+#doorsSection {
+  background-color: #111;
+  padding: 100px 0;
+  display: flex;
+  justify-content: center;
+  gap: 90px;
+  flex-wrap: wrap;
+}
+
+.door {
+  width: 300px;
+  height: 450px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.6s;
+}
+
+/* Overlay de animación de la puerta */
+.door::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('descarga (2).jpeg'); /* aquí pones la puerta abierta */
+  background-size: cover;
+  background-position: center;
+  transition: all 0.6s;
+}
+
+/* Al pasar el mouse, “abre” la puerta */
+.door:hover::after {
+  transform: translateX(100%);
+  opacity: 0;
+}
+.doorRow {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  background-color: #111;
+  padding: 100px 0;
+  display: flex;
+  justify-content: center;
+  gap: 90px;
+  flex-wrap: wrap;
+}
+.doorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.doorTitle {
+  margin-top: 15px;   /* espacio entre la puerta y el título */
+  color: white;
+  font-size: 1.2rem;  /* tamaño del título, puedes cambiarlo */
+  text-align: center;
+}
