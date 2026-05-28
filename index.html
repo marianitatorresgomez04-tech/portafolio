@@ -1,158 +1,98 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portafolio</title>
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden; /* horizontal bloqueado */
-    overflow-y: auto;   /* vertical habilitado */
-    font-family: Arial, sans-serif;
-  }
-
-  /* ------------------------------
-     PRIMER BLOQUE - Mouse Trail
-     ------------------------------ */
-  #background {
-    position: relative;
-    width: 100%;
-    height: 100vh; /* ocupa pantalla completa */
-    background: linear-gradient(120deg, #ff6a00, #ee0979, #00d2ff);
-    background-size: 600% 600%;
-    animation: gradient 20s ease infinite;
-  }
-
-  @keyframes gradient {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
-  }
-
-  #hiddenText {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 3rem;
-    text-align: center;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-    z-index: 2;
-  }
-
-  /* ------------------------------
-     SEGUNDO BLOQUE - Puertas
-     ------------------------------ */
-  #doorsSection {
-    background-color: #111;
-    padding: 100px 0;
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    flex-wrap: wrap;
-  }
-
-  .door {
-    width: 200px;
-    height: 300px;
-    background-color: #333;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.6s;
-  }
-
-  .door::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0,0,0,0.4);
-    transition: all 0.6s;
-  }
-
-  .door:hover::after {
-    transform: translateX(100%); /* simula abrir puerta */
-    opacity: 0;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>portafolio</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- PRIMER BLOQUE -->
+  <!-- ===============================
+       PRIMER BLOQUE - MOUSE TRAIL
+       =============================== -->
   <div id="background">
     <div id="hiddenText">Everything fades. Nothing lasts. Just a snake eating its own tail</div>
+    <canvas id="trailCanvas"></canvas>
   </div>
-  <canvas id="trailCanvas"></canvas>
 
-  <!-- SEGUNDO BLOQUE -->
+  <!-- ===============================
+       SEGUNDO BLOQUE - PUERTAS
+       =============================== -->
   <section id="doorsSection">
-    <div class="door" style="background-image: url('puerta1.jpg');"></div>
-    <div class="door" style="background-image: url('puerta2.jpg');"></div>
-    <div class="door" style="background-image: url('puerta3.jpg');"></div>
-    <div class="door" style="background-image: url('puerta4.jpg');"></div>
+    <div class="doorRow">
+      <div class="doorContainer">
+        <div class="door" style="background-image: url('descarga (3).jpeg');"></div>
+        <h3 class="doorTitle">Proyecto 1</h3>
+      </div>
+      <div class="doorContainer">
+        <div class="door" style="background-image: url('descarga (3).jpeg');"></div>
+        <h3 class="doorTitle">Proyecto 2</h3>
+      </div>
+    </div>
+    <div class="doorRow">
+      <div class="doorContainer">
+        <div class="door" style="background-image: url('descarga (3).jpeg');"></div>
+        <h3 class="doorTitle">Proyecto 3</h3>
+      </div>
+      <div class="doorContainer">
+        <div class="door" style="background-image: url('descarga (3).jpeg');"></div>
+        <h3 class="doorTitle">Proyecto 4</h3>
+      </div>
+    </div>
   </section>
 
-<script>
-// ------------------------------
-// Mouse Trail (mantiene intacto)
-// ------------------------------
-const canvas = document.getElementById('trailCanvas');
-const ctx = canvas.getContext('2d');
 
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
+  <!-- ===============================
+       SCRIPT MOUSE TRAIL
+       =============================== -->
+  <script>
+    const canvas = document.getElementById('trailCanvas');
+    const ctx = canvas.getContext('2d');
 
-// Capa oscura
-ctx.fillStyle = '#111';
-ctx.fillRect(0, 0, width, height);
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
 
-const trails = [];
+    // Capa oscura inicial
+    ctx.fillStyle = '#111';
+    ctx.fillRect(0, 0, width, height);
 
-window.addEventListener('resize', () => {
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-  ctx.fillStyle = '#111';
-  ctx.fillRect(0, 0, width, height);
-});
+    const trails = [];
 
-window.addEventListener('mousemove', e => {
-  trails.push({x: e.clientX, y: e.clientY, radius: 50, alpha: 1});
-});
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      ctx.fillStyle = '#111';
+      ctx.fillRect(0, 0, width, height);
+    });
 
-function animate() {
-  ctx.fillStyle = 'rgba(17,17,17,0.05)';
-  ctx.fillRect(0, 0, width, height);
+    window.addEventListener('mousemove', e => {
+      trails.push({x: e.clientX, y: e.clientY, radius: 50, alpha: 1});
+    });
 
-  ctx.globalCompositeOperation = 'destination-out';
+    function animate() {
+      // Fondo semi-transparente para efecto rastro
+      ctx.fillStyle = 'rgba(17,17,17,0.05)';
+      ctx.fillRect(0, 0, width, height);
 
-  for (let i = 0; i < trails.length; i++) {
-    const t = trails[i];
-    ctx.beginPath();
-    ctx.arc(t.x, t.y, t.radius, 0, Math.PI*2);
-    ctx.fillStyle = `rgba(0,0,0,${t.alpha})`;
-    ctx.fill();
-    t.alpha -= 0.02;
-    if (t.alpha <= 0) trails.splice(i,1);
-  }
+      ctx.globalCompositeOperation = 'destination-out';
 
-  ctx.globalCompositeOperation = 'source-over';
-  requestAnimationFrame(animate);
-}
+      for (let i = 0; i < trails.length; i++) {
+        const t = trails[i];
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, t.radius, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(0,0,0,${t.alpha})`;
+        ctx.fill();
+        t.alpha -= 0.02;
+        if (t.alpha <= 0) trails.splice(i,1);
+      }
 
-animate();
-</script>
+      ctx.globalCompositeOperation = 'source-over';
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
 
 </body>
 </html>
